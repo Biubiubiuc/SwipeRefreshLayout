@@ -4,6 +4,7 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/action_refresh"
-        android:title="@string/refresh"
-        app:showAsAction="ifRoom" />
+        android:title="@null"
+        app:actionLayout="@layout/action_refresh"
+        app:showAsAction="always" />
 </menu>

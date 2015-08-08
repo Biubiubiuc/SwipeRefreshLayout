@@ -1,24 +1,20 @@
-package com.demievil.swiperefreshlayout;
+package com.demievil.library;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 
 public class RefreshLayout extends SwipeRefreshLayout {
 
-    private int mTouchSlop;
+    private final int mTouchSlop;
     private ListView mListView;
     private OnLoadListener mOnLoadListener;
-    private View mListViewFooter;
 
-    private int mYDown;
-    private int mLastY;
+    private float firstTouchY;
+    private float lastTouchY;
 
     private boolean isLoading = false;
 
@@ -28,15 +24,11 @@ public class RefreshLayout extends SwipeRefreshLayout {
 
     public RefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
-    //set the footer of the ListView with a ProgressBar in it
-    public void setFooterView(Context context, ListView mListView, int layoutId) {
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mListViewFooter = LayoutInflater.from(context).inflate(layoutId, null,
-                false);
-        mListView.addFooterView(mListViewFooter);
-        mListView.setFooterDividersEnabled(false);
+    //set the child view of RefreshLayout
+    public void setChildView(ListView mListView) {
         this.mListView = mListView;
     }
 
@@ -45,17 +37,12 @@ public class RefreshLayout extends SwipeRefreshLayout {
         final int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mYDown = (int) event.getRawY();
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                mLastY = (int) event.getRawY();
-                if (isPullingUp())
-                    //you can add view or hint here when pulling up the ListView
+                firstTouchY = event.getRawY();
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (canLoad()) {
+                lastTouchY = event.getRawY();
+                if (canLoadMore()) {
                     loadData();
                 }
                 break;
@@ -66,7 +53,7 @@ public class RefreshLayout extends SwipeRefreshLayout {
         return super.dispatchTouchEvent(event);
     }
 
-    private boolean canLoad() {
+    private boolean canLoadMore() {
         return isBottom() && !isLoading && isPullingUp();
     }
 
@@ -81,35 +68,27 @@ public class RefreshLayout extends SwipeRefreshLayout {
     }
 
     private boolean isPullingUp() {
-        return (mYDown - mLastY) >= mTouchSlop;
+        return (firstTouchY - lastTouchY) >= mTouchSlop;
     }
 
     private void loadData() {
         if (mOnLoadListener != null) {
             setLoading(true);
-            mOnLoadListener.onLoad();
         }
     }
 
     public void setLoading(boolean loading) {
+        if (mListView == null) return;
         isLoading = loading;
-        if (isLoading) {
-            if (isRefreshing()) setRefreshing(false);
-            if (mListView.getFooterViewsCount() == 0) {
-                mListView.addFooterView(mListViewFooter);
-                mListView.setSelection(mListView.getAdapter().getCount() - 1);
-            } else {
-                mListViewFooter.setVisibility(VISIBLE);
-                //mListView.addFooterView(mListViewFooter);
+        if (loading) {
+            if (isRefreshing()) {
+                setRefreshing(false);
             }
+            mListView.setSelection(mListView.getAdapter().getCount() - 1);
+            mOnLoadListener.onLoad();
         } else {
-            if (mListView.getAdapter() instanceof HeaderViewListAdapter) {
-                mListView.removeFooterView(mListViewFooter);
-            } else {
-                mListViewFooter.setVisibility(View.GONE);
-            }
-            mYDown = 0;
-            mLastY = 0;
+            firstTouchY = 0;
+            lastTouchY = 0;
         }
     }
 
@@ -117,7 +96,7 @@ public class RefreshLayout extends SwipeRefreshLayout {
         mOnLoadListener = loadListener;
     }
 
-    public static interface OnLoadListener {
+    public interface OnLoadListener {
         public void onLoad();
     }
 }

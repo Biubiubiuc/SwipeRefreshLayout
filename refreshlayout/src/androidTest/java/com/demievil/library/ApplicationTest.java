@@ -1,4 +1,4 @@
-package com.demievil.swiperefreshlayout;
+package com.demievil.library;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

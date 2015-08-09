@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
-        applicationId "com.demievil.swiperefreshlayout"
+        applicationId "com.demievil.example"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -18,14 +18,15 @@ android {
         }
     }
 }
-//repositories {
-//    maven {
-//        url 'https://bintray.com/demievil/maven/'
-//    }
-//}
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/demievil/maven/'
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
     compile project(':refreshlayout')
+    //compile 'com.demievil.library:refreshlayout:1.0.0@aar'
 }

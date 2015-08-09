@@ -1,18 +1,23 @@
 ## SwipeRefreshLayout ##
-An extension of android.support.v4.widget.SwipeRefreshLayout with loading more function for ListView
+An extension of android.support.v4.widget.SwipeRefreshLayout with loading more function
 
 ## Note ##
-It only serves for ListView now. You can modify it to support other widget.
+- [x] Support ListView
+- [ ] Support RecyclerView (Todo)
+- [x] Custom your FooterView and load more action
+- [x] Start and stop refresh or load more manually
+
 
 ## Demo ##
 [Download apk](/demo.apk)
 
+## Screenshot ##
 ![Gif](/demo.gif)
 
-## Use ##
-Use it in your layout xml
+## Simple Example ##
+- Use RefreshLayout with in your layout
 ````xml
-<com.demievil.swiperefreshlayout.RefreshLayout
+<com.demievil.library.RefreshLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_container"
@@ -25,34 +30,45 @@ Use it in your layout xml
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:dividerHeight="1dp" />
-</com.demievil.swiperefreshlayout.RefreshLayout>
+        android:dividerHeight="1px"
+        android:footerDividersEnabled="false"
+        tools:listitem="@layout/list_item" />
+</com.demievil.library.RefreshLayout>
 ````
-
-Customize your footer layout to indicate a loading progress like:
+- Customize your footer layout to indicate a loading progress such as:
 ````xml
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footer_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:gravity="center"
-    android:padding="8dp"
-    android:visibility="gone">
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/text_more"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center|top"
+        android:gravity="center"
+        android:text="more..."
+        android:textSize="16sp" />
 
     <ProgressBar
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Inverse"
+        android:id="@+id/load_progress_bar"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true" />
-
-</RelativeLayout>
+        android:layout_height="40dp"
+        android:layout_gravity="center|top"
+        android:indeterminate="true"
+        android:visibility="gone" />
+</FrameLayout>
 ````
-Get instance and use it.
+- Get instance and use it: 
 ````java
     RefreshLayout mRefreshLayout;
     ListView mListView;
+    View footerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +77,12 @@ Get instance and use it.
 
         mRefreshLayout = (RefreshLayout) findViewById(R.id.swipe_container);
         mListView = (ListView) findViewById(R.id.list);
-        mRefreshLayout.setFooterView(this, mListView, R.layout.listview_footer);
+        footerLayout = getLayoutInflater().inflate(R.layout.listview_footer, null);
+
+        mListView.addFooterView(footerLayout);
+        mRefreshLayout.setChildView(mListView);
+	
+	 mListView.setAdapter(mAdapter);
 
         mRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green,
@@ -81,6 +102,17 @@ Get instance and use it.
             }
         });
     }
+````
+
+- You can start and stop refresh or load more as follows:
+````java
+//start and stop refresh manually
+mRefreshLayout.setRefreshing(true);
+mRefreshLayout.setRefreshing(false);
+
+//start and stop load more manually
+mRefreshLayout.setLoading(true); //this will jump to bottom anf callback OnLoadListener.onLoad()
+mRefreshLayout.setLoading(false); //this will reset laod more coordinates
 ````
 
 ## Thanks ##

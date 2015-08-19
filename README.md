@@ -14,8 +14,21 @@ An extension of android.support.v4.widget.SwipeRefreshLayout with loading more f
 ## Screenshot ##
 ![Gif](/demo.gif)
 
+## How to Use ##
+In your `build.gradle`:
+```groovy
+repositories {
+    maven {
+        url 'https://dl.bintray.com/demievil/maven/'
+    }
+}
+dependencies {
+    compile 'com.demievil.library:refreshlayout:1.0.0@aar'
+}
+```
+
 ## Simple Example ##
-- Use RefreshLayout with in your layout
+- Use RefreshLayout in your layout
 ````xml
 <com.demievil.library.RefreshLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -82,7 +95,7 @@ An extension of android.support.v4.widget.SwipeRefreshLayout with loading more f
         mListView.addFooterView(footerLayout);
         mRefreshLayout.setChildView(mListView);
 	
-	 mListView.setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         mRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green,

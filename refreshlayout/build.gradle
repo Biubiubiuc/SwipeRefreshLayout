@@ -20,18 +20,18 @@ android {
 
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'refresh-layout'
+    bintrayName = 'refreshlayout'
 
     publishedGroupId = 'com.demievil.library'
-    libraryName = 'SwipeRefreshLayout'
-    artifact = 'refresh-layout'
+    libraryName = 'refreshlayout'
+    artifact = 'refreshlayout'
 
     libraryDescription = 'An extension of android.support.v4.widget.SwipeRefreshLayout with loading more function for ListView'
 
     siteUrl = 'https://github.com/Demievil/SwipeRefreshLayout'
     gitUrl = 'https://github.com/Demievil/SwipeRefreshLayout.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'demievil'
     developerName = 'LiuYan'

@@ -17,15 +17,11 @@ An extension of android.support.v4.widget.SwipeRefreshLayout with loading more f
 ## How to Use ##
 In your `build.gradle`:
 ```groovy
-repositories {
-    maven {
-        url 'https://dl.bintray.com/demievil/maven/'
-    }
-}
 dependencies {
     compile 'com.demievil.library:refreshlayout:1.0.0@aar'
 }
 ```
+[Click to check the latest version](https://jcenter.bintray.com/com/demievil/library/refreshlayout/)
 
 ## Simple Example ##
 - Use RefreshLayout in your layout

@@ -3,8 +3,10 @@ package com.demievil.library;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 public class RefreshLayout extends SwipeRefreshLayout {
@@ -28,8 +30,28 @@ public class RefreshLayout extends SwipeRefreshLayout {
     }
 
     //set the child view of RefreshLayout,ListView
-    public void setChildView(ListView mListView) {
+
+    public void setChildView(final ListView mListView) {
         this.mListView = mListView;
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case SCROLL_STATE_FLING:
+                        break;
+                    case SCROLL_STATE_IDLE:
+                        if (canLoadMore()) {
+                            loadData();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
     }
 
     @Override
@@ -42,9 +64,6 @@ public class RefreshLayout extends SwipeRefreshLayout {
 
             case MotionEvent.ACTION_UP:
                 lastTouchY = event.getRawY();
-                if (canLoadMore()) {
-                    loadData();
-                }
                 break;
             default:
                 break;
@@ -61,9 +80,11 @@ public class RefreshLayout extends SwipeRefreshLayout {
         if (mListView.getCount() > 0) {
             if (mListView.getLastVisiblePosition() == mListView.getAdapter().getCount() - 1 &&
                     mListView.getChildAt(mListView.getChildCount() - 1).getBottom() <= mListView.getHeight()) {
+
                 return true;
             }
         }
+
         return false;
     }
 

@@ -1,6 +1,8 @@
 ## Note
 This library was intended to add load more function to the native SwipeRefreshLayout.
+
 But afterwards, I don't think it's a good idea to make load more a common library. You should custom your load more function according to what‘s the content view in SwipeRefreshLayout. 
+
 So this library will no longer be updated.
 
 ## SwipeRefreshLayout ##

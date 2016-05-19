@@ -1,9 +1,13 @@
+## Note
+This library was intended to add load more function to the native SwipeRefreshLayout.
+But afterwards, I don't think it's a good idea to make load more a common library. You should custom your load more function according to what‘s the content view in SwipeRefreshLayout. 
+So this library will no longer be updated.
+
 ## SwipeRefreshLayout ##
 An extension of android.support.v4.widget.SwipeRefreshLayout with loading more function
 
 ## Note ##
 - [x] Support ListView
-- [ ] Support RecyclerView (Todo)
 - [x] Custom your FooterView and load more action
 - [x] Start and stop refresh or load more manually
 
